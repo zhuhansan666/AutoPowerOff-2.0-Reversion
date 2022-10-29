@@ -13,5 +13,5 @@ class BackGround:
 
     def mainloop(self):
         while self.running:
-            if information.check is not False:
+            if information.check != 0:
                 ...
