@@ -1,0 +1,10 @@
+Nuitka==1.1.6
+ordered-set==4.1.0
+Pillow==9.2.0
+pip==21.3.1
+psutil==5.9.3
+pypiwin32==223
+pywin32==304
+setuptools==60.2.0
+ttkbootstrap==1.9.0
+wheel==0.37.1
