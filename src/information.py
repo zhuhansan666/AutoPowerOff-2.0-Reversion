@@ -1,6 +1,7 @@
 class Information:
     def __init__(self):
         self.__config = {}
+        self.global_error = RuntimeError("未获取到ERROR")
 
     @property
     def config(self):
@@ -20,3 +21,5 @@ class EventsInformation:
 
         # 关机内容, 如到达时间、全屏应用程序关闭、到达强制关机时间等
         self.shutdown_info = ""
+
+        self.exit = False

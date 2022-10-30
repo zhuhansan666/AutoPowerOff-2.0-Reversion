@@ -1,22 +1,14 @@
-from src.init import config
-from src.g import information
-
 from src.Tools import merge_dict
 from src.debug import Debug
 
 
 class Load:
-    def __init__(self):
-        self.__config = config
-        self.__debug = Debug()
-        self.__information = information
+    def __init__(self, information_obj, app_config_obj, config_obj):
+        self.__config = config_obj
+        self.__debug = Debug(app_config_obj, config_obj)
+        self.__information = information_obj
 
-        self.default_config = {
-            "apo-time": "17:00:00",
-            "apo-must-time": "17:20:00",
-            "timeout": 60,
-            "after-fullscreen-timeout": 10,
-        }
+        self.default_config = app_config_obj.default_config
 
     def reload(self):
         self.__config.load()
@@ -32,7 +24,3 @@ class Load:
         result["debug"] = debug_result
         self.__config.result = result.copy()
         self.__config.write()
-
-if __name__ == '__main__':
-    test = Load()
-    test.reload()

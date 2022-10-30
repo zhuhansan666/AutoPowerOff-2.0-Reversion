@@ -1,18 +1,13 @@
-from src.init import config
-
 from logging import DEBUG, INFO, WARNING, ERROR
 
 from src.Tools import merge_dict
 
 
 class Debug:
-    def __init__(self):
-        self.__config = config
+    def __init__(self, app_config_obj, config_obj):
+        self.__config = config_obj
 
-        self.default_debug = {
-            "out-log": True,
-            "log-level": INFO,
-        }
+        self.default_debug = app_config_obj.default_debug
 
         self.log_levels = {
             "DEBUG": DEBUG,
