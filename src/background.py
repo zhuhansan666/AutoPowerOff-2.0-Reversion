@@ -1,9 +1,17 @@
 from src.check import Check
 
+from subprocess import run
+
 from logging import getLogger
 from time import time as get_time
 from threading import Thread
 from time import sleep
+
+logger = getLogger("BackGround")
+
+DEBUG = True
+if DEBUG:
+    print("In Debug Mode!")
 
 
 class BackGround:
@@ -26,15 +34,28 @@ class BackGround:
     def exit(self):
         self.running = False
 
+    @staticmethod
+    def __shutdown():
+        run("shutdown /f /s /t 0")
+
     def mainloop(self):
         while self.running:
             self.__events_information.shutdown_type = self.__check.check()
-            if self.__events_information.check != 0:
-                if self.__events_information.check == 1:
+            if self.__events_information.shutdown_type != 0:
+                if self.__events_information.shutdown_type == 1:
                     self.__events_information.shutdown_info = "检测到您长时间无操作, 是否关机?"
-                elif self.__events_information.check == 2:
+                elif self.__events_information.shutdown_type == 2:
                     self.__events_information.shutdown_info = "您刚刚关闭了全屏应用, 是否关机?"
-                elif self.__events_information.check == 3:
+                elif self.__events_information.shutdown_type == 3:
                     self.__events_information.shutdown_info = "正在强制关机中~ 请稍后..."
             else:
                 self.__events_information.shutdown_info = ""
+            if self.__events_information.shutdown is True:
+                logger.info("关机...")
+                self.exit()
+                if not DEBUG:
+                    self.__shutdown()
+                else:
+                    print("DEBUG: Shutdown (Will not true shutdown)...")
+                self.__events_information.exit = True
+            sleep(0.5)

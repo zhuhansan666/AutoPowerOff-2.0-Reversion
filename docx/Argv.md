@@ -13,3 +13,9 @@
 `out-log` -> bool 是否输出日志 <br>
 `log-level` -> int/str 日志输出级别 (即python logging DEBUG/INFO/WARNING/ERROR, 分别对应10/20/30/40) <br>
 
+
+# Ui相关
+## Ui返回值
+`choose.py.Ui.mainloop` 返回值 -> int 0 -> 后台检测; 1 -> 关机; 2 -> 退出程序; <br>
+
+

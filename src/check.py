@@ -18,11 +18,12 @@ class Check:
         检测是否处于合法关机时间内
     """
 
-    def __init__(self, information_obj):
+    def __init__(self, information_obj, events_information_obj):
         self.mouse_check_thread = None
         self.keyboard_check_thread = None
 
         self.__config = information_obj
+        self.__events_information = events_information_obj
 
         self.shutdown_code = 0
 
@@ -126,8 +127,10 @@ class Check:
                 logger.debug("全屏应用程序关闭")
 
     def __call_ui(self, timeout: int | float):
+        # print("CallUi", timeout)
         if self.ui_obj is not None:
-            self.ui_obj.mainloop(timeout)
+            return self.ui_obj.mainloop(timeout)
+        return 1
 
     def __timecheck(self):
         times = self.get_time().split(":")
@@ -150,14 +153,22 @@ class Check:
                         self.get_time(False) - self.latest_keyboard_mouse_event_time >= \
                         self.__config.config["after-fullscreen-timeout"]:
                     ui_timeout = self.__config.config["ui-after-fullscreen-timeout"]
-                    self.__call_ui(ui_timeout)
                     self.shutdown_code = 2
+                    result = self.__call_ui(ui_timeout)
+                    if result == 1:
+                        self.__events_information.shutdown = True
+                    elif result == 2:
+                        self.__config.exit = True
             elif not self.fullscreen_app[0]:  # 全屏应用未打开
                 if self.latest_keyboard_mouse_event_time != 0 and \
                         self.get_time(False) - self.latest_keyboard_mouse_event_time >= self.__config.config["timeout"]:
                     ui_timeout = self.__config.config["ui-timeout"]
-                    self.__call_ui(ui_timeout)
                     self.shutdown_code = 1
+                    result = self.__call_ui(ui_timeout)
+                    if result == 1:
+                        self.__events_information.shutdown = True
+                    elif result == 2:
+                        self.__config.exit = True
         elif apo_2 is True:  # 强制关机
             if self.arrived_shutdown_time != 2:
                 self.arrived_shutdown_time = 2

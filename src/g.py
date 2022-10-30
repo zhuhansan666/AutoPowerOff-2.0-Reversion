@@ -20,7 +20,7 @@ events_information = EventsInformation()
 load = Load(information, app_config, config)
 load.reload()
 
-check = Check(information)
+check = Check(information, events_information)
 
 file_tools.create_file(app_config.log_filename)
 logging.basicConfig(level=information.config["debug"]["log-level"], style='{', encoding="u8",
@@ -31,3 +31,8 @@ logging.basicConfig(level=information.config["debug"]["log-level"], style='{', e
 
 VERSION = app_config.VERSION
 
+logger = logging.getLogger("g")
+version = [str(item) for item in VERSION]
+logger.info("\n" + "-" * 100 + "\n" + "欢迎使用 由 爱喝牛奶の涛哥 和 CYH 共同制作的 AutoPowerOff2.0 ({})".format(
+    ".".join(version)) + "\n" + "-" * 100
+            )

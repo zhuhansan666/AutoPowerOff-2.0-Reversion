@@ -36,9 +36,9 @@ def all_exit():
 
 @atexit.register
 def exit_func():
-    version = [str(item) for item in VERSION]
+    _version = [str(item) for item in VERSION]
     logger.info("感谢使用 由 爱喝牛奶の涛哥 和 CYH 共同制作的 AutoPowerOff2.0 ({}), Github开源地址: {}".format(
-        ", ".join(version),
+        ".".join(_version),
         app_config.github_url
     ))
 
@@ -52,15 +52,11 @@ try:
     # background.running
 
     while True:
-        # check._Check__check_fullscreen_app()
-        # print(check.fullscreen_app)
-        check.check()
-        # print(information.config)
-        print(time() - check.latest_keyboard_mouse_event_time)
-        print(f"{check.shutdown_code=}, {check.fullscreen_app=}")
         sleep(1)
+        print(time() - check.latest_keyboard_mouse_event_time)
         if events_information.exit:
             all_exit()
+            break
 except Exception as e:
     information.global_error = e
     events_information.exit = True
