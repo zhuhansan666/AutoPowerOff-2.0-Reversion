@@ -5,6 +5,8 @@
 `apo-must-time` -> str 强制关机时间 (%H:%M:%S) <br>
 `timeout` -> int/float 键鼠无操作最大时间, 超过此时间弹出关机提示 (秒) <br>
 `after-fullscreen-timeout` -> int/float 在全屏应用关闭后键鼠无操作最大时间, 超过此时间弹出关机提示 (秒) <br>
+`ui-timeout` -> int/float 提示ui超时时间 <br>
+`ui-after-fullscreen-timeout` -> int/float 全屏应用后超时时间 <br>
 `debug` -> dict debug参数, 详见下方 <br>
 
 ## Debug 参数

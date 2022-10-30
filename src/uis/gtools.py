@@ -1,4 +1,5 @@
 import win32api, win32con, win32print, win32gui
+from typing import Iterator
 
 
 def get_task_bar_size():
@@ -29,3 +30,10 @@ def get_scaling():
     real_resolution = get_real_resolution()
     screen_size = get_screen_size()
     return round(real_resolution[0] / screen_size[0], 2)
+
+
+def check_winsize(win_size: list | tuple, target: list | tuple):
+    """检查win大小, 若前者大于或者return True"""
+    if win_size[0] - target[0] >= 0 and win_size[1] - target[1] >= 0:
+        return True
+    return False

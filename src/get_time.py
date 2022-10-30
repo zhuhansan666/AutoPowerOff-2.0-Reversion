@@ -2,8 +2,9 @@
     获取UTC-8时间戳
 """
 from requests import get
-from src.g import app_config
+from src.app_config import AppConfig
 
+app_config = AppConfig()
 
 def get_time():
     try:
