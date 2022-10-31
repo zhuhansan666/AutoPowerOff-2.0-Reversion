@@ -12,15 +12,24 @@ class Load:
 
     def reload(self):
         self.__config.load()
-
-        # 程序可读取的配置
-        result = merge_dict(self.__config.result, self.default_config)
-        debug_result = self.__debug.reload()
-        result["debug"] = debug_result
-        self.__information.config = result.copy()
+        print(self.__config.result)
 
         # 便于人观看的配置
-        debug_result = self.__debug.reload(True)
+        result = merge_dict(self.__config.result, self.default_config)
+        self.__config.result = result
+        debug_result = self.__debug.reload()
+        print(f"{debug_result =}")
         result["debug"] = debug_result
+        # result["debug"] = self.__debug.default_debug
+        print(1, result)
         self.__config.result = result.copy()
+        # print(2, self.__config.result)
         self.__config.write()
+
+        # # 程序可读取的配置
+        # result = result.copy()
+        # # debug_result = self.__debug.reload(True)
+        # # result["debug"] = debug_result
+        # self.__information.config = result
+        #
+        # # print(f"2 {self.__config.result = }")

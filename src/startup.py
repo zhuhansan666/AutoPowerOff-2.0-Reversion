@@ -1,13 +1,14 @@
 from traceback import format_exc
 from src.Tools import FileTools
+
 file_tools = FileTools()
 
 import winreg
 
 
-def set_startup(key_name: str = "_", target_file: str = None, _type: str | tuple= "system"):
+def set_startup(key_name: str = "_", target_file: str = None, _type: str | tuple = "system"):
     """
-
+        写入自启动
     """
     _type_lower = _type.lower()
     if _type_lower == "sys" or _type_lower == "system":

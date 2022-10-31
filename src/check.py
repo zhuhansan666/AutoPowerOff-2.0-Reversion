@@ -22,7 +22,7 @@ class Check:
         self.mouse_check_thread = None
         self.keyboard_check_thread = None
 
-        self.__config = information_obj
+        self.__information = information_obj
         self.__events_information = events_information_obj
 
         self.shutdown_code = 0
@@ -130,49 +130,60 @@ class Check:
         # print("CallUi", timeout)
         if self.ui_obj is not None:
             return self.ui_obj.mainloop(timeout)
-        return 1
+        return 0
 
     def __timecheck(self):
         times = self.get_time().split(":")
         times = [int(t) for t in times]
-        target_times = self.__config.config["apo-time"].split(":")  # 关机时间
+        target_times = self.__information.config["apo-time"].split(":")  # 关机时间
         target_times = [int(_t) for _t in target_times]
-        target_times2 = self.__config.config["apo-must-time"].split(":")
+        target_times2 = self.__information.config["apo-must-time"].split(":")
         target_times2 = [int(_t) for _t in target_times2]  # 强制关机时间
         apo_1 = self.__check_time_size(times, target_times)
         apo_2 = self.__check_time_size(times, target_times2)
 
         if apo_1 is True and apo_2 is not True:  # 关机~强制关机之间
             if self.arrived_shutdown_time == 0:
-                logger.info("到达关机时间 ({})".format(self.__config.config["apo-time"]))
+                logger.info("到达关机时间 ({})".format(self.__information.config["apo-time"]))
                 self.arrived_shutdown_time = 1
 
             if not self.fullscreen_app[0] and self.get_time(False) - self.fullscreen_app[2] <= \
-                    self.__config.config["after-fullscreen-timeout"] + 3:  # 如果刚刚关闭了全屏应用
+                    self.__information.config["after-fullscreen-timeout"] + 3:  # 如果刚刚关闭了全屏应用
                 if self.latest_keyboard_mouse_event_time != 0 and \
                         self.get_time(False) - self.latest_keyboard_mouse_event_time >= \
-                        self.__config.config["after-fullscreen-timeout"]:
-                    ui_timeout = self.__config.config["ui-after-fullscreen-timeout"]
+                        self.__information.config["after-fullscreen-timeout"]:
+                    ui_timeout = self.__information.config["ui-after-fullscreen-timeout"]
                     self.shutdown_code = 2
                     result = self.__call_ui(ui_timeout)
                     if result == 1:
+                        logger.debug("(刚刚关闭了全屏应用) 选定关机或超时")
                         self.__events_information.shutdown = True
                     elif result == 2:
-                        self.__config.exit = True
+                        logger.debug("(刚刚关闭了全屏应用) 取消关机")
+                        self.__information.exit = True
+                    else:
+                        logger.debug("(刚刚关闭了全屏应用) 后台运行")
+                        self.latest_keyboard_mouse_event_time = self.get_time(False)
+                        self.fullscreen_app = [False, 0, 0]
             elif not self.fullscreen_app[0]:  # 全屏应用未打开
                 if self.latest_keyboard_mouse_event_time != 0 and \
-                        self.get_time(False) - self.latest_keyboard_mouse_event_time >= self.__config.config["timeout"]:
-                    ui_timeout = self.__config.config["ui-timeout"]
+                        self.get_time(False) - self.latest_keyboard_mouse_event_time >= self.__information.config["timeout"]:
+                    ui_timeout = self.__information.config["ui-timeout"]
                     self.shutdown_code = 1
                     result = self.__call_ui(ui_timeout)
                     if result == 1:
+                        logger.debug("(正常模式) 选定关机或超时")
                         self.__events_information.shutdown = True
                     elif result == 2:
-                        self.__config.exit = True
+                        logger.debug("(正常模式) 取消关机")
+                        self.__information.exit = True
+                    else:
+                        logger.debug("(正常模式) 后台运行")
+                        self.latest_keyboard_mouse_event_time = self.get_time(False)
         elif apo_2 is True:  # 强制关机
             if self.arrived_shutdown_time != 2:
                 self.arrived_shutdown_time = 2
-                logger.info("到达强制关机时间 ({})".format(self.__config.config["apo-must-time"]))
+                logger.info("到达强制关机时间 ({})".format(self.__information.config["apo-must-time"]))
             self.shutdown_code = 3
 
     def __keyboard_events(self, key):

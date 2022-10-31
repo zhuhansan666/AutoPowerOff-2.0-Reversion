@@ -18,7 +18,7 @@ class Config:
         self.loading = False
         self.writing = False
 
-        self.result = {}
+        self.result: str | dict = {}
         self.result_old = {}
         self.inited = False
         self.__file_tools = FileTools()

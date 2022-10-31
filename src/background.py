@@ -15,7 +15,9 @@ if DEBUG:
 
 
 class BackGround:
-    def __init__(self, check_obj: Check, events_information_obj, load_obj, app_config_obj):
+    def __init__(self, exit_func, check_obj: Check, events_information_obj, load_obj, app_config_obj):
+        self.__exit_func = exit_func
+
         self.__check = check_obj
         self.__events_information = events_information_obj
         self.__load = load_obj
@@ -40,6 +42,12 @@ class BackGround:
 
     def mainloop(self):
         while self.running:
+            if self.__events_information.exit:
+                try:
+                    self.__exit_func()
+                except Exception as e:
+                    logger.error("运行退出程序发生错误: ", exc_info=e)
+
             self.__events_information.shutdown_type = self.__check.check()
             if self.__events_information.shutdown_type != 0:
                 if self.__events_information.shutdown_type == 1:
