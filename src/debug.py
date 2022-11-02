@@ -70,7 +70,7 @@ class Debug:
     #     return dic
 
     def reload(self, decode: bool = False):
-        print(f"debug -> {self.__config.result}")
+        # print(f"debug -> {self.__config.result}")
         result = merge_dict(self.__config.result.get("debug", {}), self.default_debug)
         if decode:
             result = self.__decode_log_level(result)

@@ -23,10 +23,11 @@ load.reload()
 check = Check(information, events_information)
 
 file_tools.create_file(app_config.log_filename)
-logging.basicConfig(level=information.config.get("debug", app_config.default_debug)["log-level"], style='{', encoding="u8",
-                    filename=app_config.log_filename if information.config.get(
+logging.basicConfig(level=information.config.get("debug", app_config.default_debug)["log-level"], style='{',
+                    encoding="u8", filename=app_config.log_filename if information.config.get(
                         "debug", app_config.default_debug)["out-log"] else None,
-                    format='[{asctime}:%03d] [{levelname}] In {filename} Line {lineno}: {message}' % (
+                    format='[{asctime}:%03d] [{levelname}] In {filename} At PID-{process}'
+                           '.{threadName} Line {lineno}: {message}' % (
                                    time() % 1 * 1000),
                     datefmt='%Y-%m-%d %H:%M:%S')
 

@@ -3,6 +3,8 @@ from threading import Thread
 
 from src.Tools import FileTools
 
+from time import sleep
+
 
 class Config:
     """
@@ -19,7 +21,7 @@ class Config:
         self.writing = False
 
         self.result: str | dict = {}
-        self.result_old = {}
+        self.result_old: str | dict = {}
         self.inited = False
         self.__file_tools = FileTools()
 
@@ -111,9 +113,8 @@ class Config:
                 self.__update_errors()
             else:
                 result = result[-1]  # 将文件内容 (dict) 设置为 result
-                self.__dict = result
 
-                self.result = self.__dict
+                self.result = result
         else:
             self.__error = [-4, f"""WARING: file type \"{file_suffix}\" dose not support, it will open by text"""]
             self.__update_errors()

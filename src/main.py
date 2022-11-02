@@ -25,10 +25,10 @@ class Main:
     def __init__(self):
         self.running = True
 
-        self.background = BackGround(self.all_exit, check, events_information, load, app_config)
+        self.background = BackGround(self.all_exit, check, events_information, load, app_config, information)
         self.shutdown_event = ShutdownEvent(self.shutdown_event_func)
 
-        self.background_thread = Thread(target=self.background.mainloop, daemon=True)
+        self.background_thread = Thread(name="background", target=self.background.mainloop, daemon=True)
         self.background_thread.start()
 
         self.write_startup()
@@ -61,7 +61,8 @@ class Main:
     def exit(self):
         self.running = False
 
-    def excep_thook(self, exc_type, exc_value, tb):
+    @staticmethod
+    def excepthook(exc_type, exc_value, tb):
         information.global_error = tb
         events_information.exit = True
         logger.error("主程序发生错误: {}".format(format_exception(exc_type, exc_value, tb)))
@@ -70,13 +71,12 @@ class Main:
         while self.running:
             sleep(1)
             # print(time() - check.latest_keyboard_mouse_event_time)
-            # print(information.config)
             if events_information.exit:
                 break
 
 
 if __name__ == '__main__':
     main = Main()
-    excepthook = main.excep_thook
+    excepthook = main.excepthook
     atexit.register(main.exit_func)
     main.mainloop()

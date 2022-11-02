@@ -180,10 +180,10 @@ class FileTools:
         res = self.read_file(filename, encode, mode)
         if res[0] == 0:
             try:
-                json_info = loads(res[1])
-                return 0, json_info
+                json_info: dict = loads(res[1])
+                return 0, json_info.copy()
             except JSONDecodeError as e:
-                return -2, "Json load error: ".format(e)
+                return -2, "Json load error: {}".format(e)
             except Exception as e:
                 return -1, e
         else:
@@ -220,7 +220,7 @@ class FileTools:
         error code: 0 -> 正常, -1 -> 文件读取错误, -2 -> 将dict加载为json错误
         """
         try:
-            json_info = dumps(info, indent=4)
+            json_info = dumps(info.copy(), indent=4)
         except Exception as e:
             return -2, e
 

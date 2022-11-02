@@ -13,7 +13,7 @@
 ## Debug 参数
 
 `out-log` -> bool 是否输出日志 <br>
-`log-level` -> int/str 日志输出级别 (即python logging DEBUG/INFO/WARNING/ERROR, 分别对应10/20/30/40) <br>
+`log-level` -> int/str (**不支持热加载**) 日志输出级别 (即python logging DEBUG/INFO/WARNING/ERROR, 分别对应10/20/30/40) <br>
 
 
 # Ui相关

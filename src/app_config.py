@@ -41,7 +41,9 @@ class AppConfig:
         }
 
         self.log_filename = '{}'.format(strftime("./log/%Y-%m-%d.log", localtime()))
+
         self.reload_file_interval: float | int = 0.5
+        self.rewrite_file_interval: float | int = 1
 
 
 if __name__ == '__main__':

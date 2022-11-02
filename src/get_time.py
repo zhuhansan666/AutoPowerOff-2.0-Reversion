@@ -6,6 +6,7 @@ from src.app_config import AppConfig
 
 app_config = AppConfig()
 
+
 def get_time():
     try:
         result = float(get(app_config.get_time_url[0], headers=app_config.ua).text)
